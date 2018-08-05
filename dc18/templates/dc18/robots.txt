@@ -1,0 +1,7 @@
+{% if SANDBOX %}
+User-agent: *
+Disallow: /
+{% else %}
+User-agent: *
+Disallow:
+{% endif %}

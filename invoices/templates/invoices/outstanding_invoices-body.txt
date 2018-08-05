@@ -1,0 +1,19 @@
+Dear {{ name }}
+
+Our records indicate that you haven't settled your {{ WAFER_CONFERENCE_NAME }} invoice, for a
+total of {{ total }} CAD.
+
+While we do accept cash payment on-site, we would strongly prefer if you
+settled the invoice directly online, by going to your profile on the DebConf
+website [0]. We will not have credit-card facilities available on-site.
+
+[0] https://debconf18.debconf.org/accounts/profile/
+
+The invoice details are as follows:
+
+Invoice number #{{ invoice_number }}
+
+{{ invoice_details }}
+
+Thanks for your support,
+The {{ WAFER_CONFERENCE_NAME }} Registration Team

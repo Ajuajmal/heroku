@@ -1,0 +1,71 @@
+{% extends "register/form.html" %}
+{% block extra_foot %}
+  <script type="text/javascript">
+    'use strict';
+    $(function() {
+      var minDate = moment('{{ ARRIVE_ON_OR_AFTER|date:"Y-m-d" }} 00:00');
+      var maxDate = moment('{{ LEAVE_ON_OR_BEFORE|date:"Y-m-d" }} 10:00');
+
+      function validatedDate() {
+        var current_value = moment(this.value);
+        if (!current_value.isValid() ||
+              current_value.diff(minDate) < 0 ||
+              current_value.diff(maxDate) > 0) {
+          return null;
+        }
+        return current_value;
+      }
+
+      function setDefault(defaultDate) {
+        return (function(e) {
+          var validated = validatedDate.call(this);
+          // Hack: viewDate is busted
+          // https://github.com/Eonasdan/bootstrap-datetimepicker/issues/1959
+          var setDate = $(this).data('DateTimePicker').date;
+          setDate(validated || defaultDate);
+          if (!validated) {
+            setDate(null);
+          }
+        });
+      }
+
+      $('.datetimeinput').each(function() {
+        var current_value = validatedDate.call(this);
+        $(this).datetimepicker({
+          extraFormats: ['YYYY-MM-DD HH:mm:ss'],
+          format: 'YYYY-MM-DD HH:mm',
+          inline: true,
+          locale: 'en-gb',
+          maxDate: maxDate,
+          minDate: minDate,
+          sideBySide: true,
+          useCurrent: false,
+          icons: {
+            clear: 'fas fa-trash-alt',
+            close: 'fas fa-times',
+            date: 'fas fa-calendar-alt',
+            down: 'fas fa-chevron-down',
+            next: 'fas fa-chevron-right',
+            previous: 'fas fa-chevron-left',
+            time: 'fas fa-clock',
+            today: 'far fa-dot-circle',
+            up: 'fas fa-chevron-up',
+          },
+        });
+        // Ensure onShow is initially called. And that we don't render the page
+        // with just the departure widget shown, because that's just weird.
+        $(this).data('DateTimePicker').hide();
+      });
+
+      $('#arrival').on('dp.show', setDefault(minDate));
+      $('#departure').on('dp.show', setDefault(maxDate));
+
+      $('#arrival').on('dp.change', function(e) {
+        $('#departure').data('DateTimePicker').minDate(e.date || minDate);
+      });
+      $('#departure').on('dp.change', function(e) {
+        $('#arrival').data('DateTimePicker').maxDate(e.date || maxDate);
+      });
+    });
+  </script>
+{% endblock %}

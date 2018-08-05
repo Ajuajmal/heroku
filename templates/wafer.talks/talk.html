@@ -1,0 +1,176 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load static from staticfiles %}
+{% block extra_head %}
+  {{ block.super }}
+  {% if can_review %}
+    {{ review_form.media.css }}
+  {% endif %}
+{% endblock %}
+{% block title %}{{ object.title }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block content %}
+{% for talk_url in talk.urls.all %}
+  {% if talk_url.description == "Video" %}
+    <div id="video">
+      <div class="container">
+        <div class="video-container">
+          <video class="video-js vjs-default-skin vjs-big-play-centered" controls
+                 preload="auto" width="1280" height="720" data-setup="{}">
+            <source src="{{ talk_url.url }}" type="video/webm">
+          </video>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}
+<section class="wafer wafer-talk">
+  <h1>
+    {{ object.title }}
+    {% if can_edit %}
+      <a href="{% url 'wafer_talk_edit' object.pk %}" class="float-right btn btn-secondary btn-lg d-print-none">{% trans 'Edit' %}</a>
+    {% endif %}
+    {% if can_review %}
+      <a href="#review" class="float-right btn btn-secondary btn-lg" data-toggle="collapse" data-target="#review">{% trans 'Review' %}</a>
+    {% endif %}
+  </h1>
+  <div>
+    <p>
+      {% blocktrans count counter=object.authors.count %}
+        Speaker:
+      {% plural %}
+        Speakers:
+      {% endblocktrans %}
+      {% for author in object.authors.all %}
+        <a href="{% url 'wafer_user_profile' username=author.username %}">{{ author.userprofile.display_name }}</a>
+      {% endfor %}
+    </p>
+    {% if object.track %}
+      <p>
+        {% blocktrans with track=object.track.name %}
+          Track:
+          {{ track }}
+        {% endblocktrans %}
+      </p>
+    {% endif %}
+    <p>
+      {% blocktrans with talk_type=object.talk_type.name|default:'Talk' %}
+        Type:
+        {{ talk_type }}
+      {% endblocktrans %}
+    </p>
+    {% if object.get_in_schedule %}
+      {% for schedule in object.scheduleitem_set.all %}
+        <p>
+          Video:
+          {% if object.video and schedule.venue.order < 4 %}
+            <i class="fas fa-video" title="video stream expected"></i>
+          {% else %}
+            <span class="fa-stack" title="no video stream expected">
+              <i class="fas fa-video fa-stack-1x"></i>
+              <i class="fas fa-ban fa-stack-2x text-danger"></i>
+            </span>
+          {% endif %}
+        </p>
+        <p>
+          {% blocktrans with venue=schedule.venue %}
+            Room:
+            {{ venue }}
+          {% endblocktrans %}
+          {% if object.video and schedule.venue.order < 4 %}
+            <a class="btn btn-info" href="{{ schedule.venue.get_absolute_url }}">Live Stream</a>
+          {% endif %}
+        </p>
+        <p>
+          {% blocktrans with start_time=schedule.get_start_time %}
+            Time:
+            {{ start_time }}
+          {% endblocktrans %}
+        </p>
+        <p>
+          {% blocktrans with hours=schedule.get_duration.hours|stringformat:"d" minutes=schedule.get_duration.minutes|stringformat:"02d" %}
+            Duration:
+            {{ hours }}:{{ minutes }}
+          {% endblocktrans %}
+        </p>
+      {% endfor %}
+    {% endif %}
+  </div>
+  {% if user.is_staff or perms.talks.view_all_talks %}
+    <div>
+      <p>
+        {% trans 'Status:' %}
+        {% if object.submitted %}
+          <span class="badge badge-info">{% trans 'Submitted' %}</span>
+        {% elif object.under_consideration %}
+          <span class="badge badge-info">{% trans 'Under consideration' %}</span>
+        {% elif object.provisional %}
+          <span class="badge badge-success">{% trans 'Provisionally Accepted' %}</span>
+        {% elif object.accepted %}
+          <span class="badge badge-success">{% trans 'Accepted' %}</span>
+        {% elif object.cancelled %}
+          <span class="badge badge-warning">{% trans 'Cancelled' %}</span>
+        {% else %}
+          <span class="badge badge-danger">{% trans 'Not accepted' %}</span>
+        {% endif %}
+      </p>
+    </div>
+  {% endif %}
+  <div id="abstract">
+    {{ object.abstract.rendered|safe }}
+  </div>
+  {% if perms.talks.view_all_talks or user.is_superuser %}
+    {% if talk.notes %}
+      <div id="notes" class="card mb-3">
+        <div class="card-header">
+          {% blocktrans %}
+            <h2>Talk Notes</h2>
+            <p>(The following is not visible to attendees.)</p>
+          {% endblocktrans %}
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            {{ object.notes|urlize|linebreaksbr }}
+          </p>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+  {% if perms.talks.edit_private_notes and object.private_notes %}
+    <div id="private_notes" class="card mb-3">
+      <div class="card-header">
+        {% blocktrans %}
+          <h2>Private notes</h2>
+          <p>(The following is not visible to submitters or attendees.)</p>
+        {% endblocktrans %}
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          {{ object.private_notes|urlize|linebreaksbr }}
+        </p>
+      </div>
+    </div>
+  {% endif %}
+  {% if talk.urls.all %}
+    <h3 id="urls_title">{% trans "URLs" %}</h3>
+    <ul class="list-group" id="urls">
+      {% for talkurl in talk.urls.all %}
+        <li class="list-group-item"><a href="{{ talkurl.url }}">{{ talkurl.description }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</section>
+{% if can_review %}
+  <section class="wafer wafer-talk-review collapse" id="review">
+    <h2>{% trans 'Review' %}</h2>
+    {% crispy review_form %}
+  </section>
+{% endif %}
+{% endblock %}
+{% block extra_foot %}
+  {{ block.super }}
+  {% if can_review %}
+    {{ review_form.media.js }}
+    <script type="text/javascript" src="{% static 'js/markitup.js' %}"></script>
+  {% endif %}
+{% endblock %}

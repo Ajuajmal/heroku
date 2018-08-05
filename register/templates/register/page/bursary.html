@@ -1,0 +1,23 @@
+{% extends "register/form.html" %}
+{% block extra_foot %}
+  <script type="text/javascript">
+    'use strict';
+    $(function() {
+      function requireDetails() {
+        var checked = false;
+        $('#bursary-requests input').each(function() {
+          checked = checked || this.checked;
+        });
+        return checked;
+      }
+      hookDependentVisibility(
+        $('#bursary-request-food'), $('#bursary-details'), requireDetails);
+      hookDependentVisibility(
+        $('#bursary-request-accomm'), $('#bursary-details'), requireDetails);
+      hookDependentVisibility(
+        $('#bursary-request-travel'), $('#bursary-details'), requireDetails);
+      hookDependentVisibility(
+        $('#bursary-request-travel'), $('#travel-details'));
+    });
+  </script>
+{% endblock %}

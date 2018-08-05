@@ -1,0 +1,354 @@
+// The datetimepicker hasn't been ported to Bootstrap 4
+$btn-primary-bg: theme-color("primary");
+$btn-primary-color: color-yiq($btn-primary-bg);
+$border-radius-base: $border-radius;
+$gray-light: $gray-600;
+$gray-lighter: $gray-200;
+$screen-sm-min: map-get($grid-breakpoints, 'sm');
+$screen-md-min: map-get($grid-breakpoints, 'md');
+$screen-lg-min: map-get($grid-breakpoints, 'lg');
+
+// http://colorbrewer2.org/#type=qualitative&scheme=Set3&n=12
+$colors-12: (
+  #8dd3c7,
+  #ffffb3,
+  #bebada,
+  #fb8072,
+  #80b1d3,
+  #fdb462,
+  #b3de69,
+  #fccde5,
+  #d9d9d9,
+  #bc80bd,
+  #ccebc5,
+  #ffed6f,
+);
+$track-colors-brightness: 0.5;
+
+@function track-color($index) {
+  @return transparentize(nth($colors-12, $index), $track-colors-brightness);
+}
+
+@import "eonasdan-bootstrap-datetimepicker/src/sass/_bootstrap-datetimepicker.scss";
+
+// General
+#main {
+  margin-top: 2rem;
+
+  table {
+    @extend .table;
+  }
+
+  .table-sm {
+    @extend .table-sm;
+  }
+}
+
+a.btn {
+  text-decoration: none;
+}
+
+.wafer-sponsors {
+  a {
+    height: 100%;
+
+    img {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 90%;
+      max-width: 60vw;
+      height: 90%;
+    }
+  }
+
+  .row {
+    margin-top: 1.3rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .sponsors-platinum {
+    height: 10rem;
+    font-size: 1.5rem;
+    img {
+      max-width: none;
+    }
+  }
+
+  .sponsors-gold {
+    height: 8rem;
+    font-size: 0.9rem;
+  }
+
+  .sponsors-silver {
+    height: 6rem;
+    font-size: 0.8rem;
+  }
+
+  .sponsors-bronze {
+    height: 4rem;
+    font-size: 0.6rem;
+  }
+
+  .sponsors-supporter {
+    height: 3rem;
+    font-size: 0.5rem;
+  }
+
+  .sponsor-us {
+    border-style: dotted;
+    padding: 1rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @include media-breakpoint-down(xs) {
+      font-size: 0.8em;
+    }
+  }
+}
+
+#login-debian-logos {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  img {
+    max-height: 4rem;
+  }
+}
+
+// Profile form
+form #div_id_twitter_handle, form #div_id_github_username {
+  display: none;
+}
+
+// Registration form
+form#register {
+  #hidden-next {
+    display: none;
+  }
+
+  .pgp-fingerprints {
+    font-family: monospace;
+  }
+
+  // Hack: The the date-picker hard-codes col-md-6, but we need to use
+  // different breakpoints
+  // https://salsa.debian.org/debconf-team/public/websites/dc18/issues/35
+  .datepicker.col-md-6,
+  .timepicker.col-md-6 {
+    // Undo col-md-6 behavior
+    @include media-breakpoint-up(md) {
+      flex: 0 1 auto;
+      max-width: none;
+    }
+    // Re-apply as col-xl-6
+    @include media-breakpoint-up(xl) {
+      @include make-col(6);
+    }
+  }
+}
+
+table.register-details {
+  @extend .table-striped;
+  th {
+    max-width: 10rex;
+  }
+}
+
+table.register-invoice {
+  @extend .table;
+
+  tr.line {
+    td {
+      text-align: right;
+    }
+    td:first-child {
+      text-align: left;
+    }
+  }
+  tr.total td {
+    text-align: right;
+  }
+}
+ol.registration-steps {
+  li.current-step {
+    font-weight: bold;
+  }
+  li:not(.current-step) {
+    a.inaccessible-step {
+      color: $gray-light;
+    }
+  }
+}
+
+// Front Desk interface
+td.boolean {
+  .fa {
+    font-size: 150%;
+  }
+
+  .fa-check-circle {
+    color: green;
+  }
+
+  .fa-times {
+    color: red;
+  }
+}
+
+li.invoice {
+  @extend .alert;
+}
+li.invoice-draft {
+  @extend .alert-danger;
+}
+li.invoice-pending {
+  @extend .alert-warning;
+}
+li.invoice-paid {
+  @extend .alert-success;
+}
+
+// Schedule
+#main .wafer-schedule {
+  table {
+    @extend .table-bordered;
+    @extend .table-hover;
+
+    $schedule-border: 1px solid #999;
+
+    tr, td, th {
+      border: $schedule-border;
+
+      .scheduleslot {
+        background-color: transparentize(#4b0080, .5);
+        color: white;
+      }
+    }
+  }
+
+  .meal {
+    @extend .align-middle;
+    text-align: center;
+  }
+
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.wafer-schedule, .track-list {
+  .meal {
+    background-color: transparentize(#4b0080, .8);
+  }
+}
+
+.track-packaging-policy-and-debian-infrastructure {
+  background-color: track-color(1);
+}
+.track-social-context {
+  background-color: track-color(2);
+}
+.track-security {
+  background-color: track-color(3);
+}
+.track-plenary {
+  background-color: track-color(4);
+}
+.track-debian-in-science {
+  background-color: track-color(5);
+}
+.track-embedded {
+  background-color: track-color(6);
+}
+.track-cloud-and-containers {
+  background-color: track-color(7);
+}
+.track-systems-administration-automation-and-orchestration {
+  background-color: track-color(8);
+}
+.track-ad-hoc-talks {
+  background-color: track-color(9);
+}
+.track-debian-blends {
+  background-color: track-color(12);
+}
+.track-other {
+  background-color: white;
+}
+
+// Front Page:
+#main.index {
+  margin-top: 0;
+
+  .background-kochi {
+    padding-top: 7rem;
+    background-image: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url(../img/kochi.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: none;
+    color: $white;
+  }
+
+  #calls-to-action,
+  #news-section,
+  .wafer-sponsors {
+    margin-bottom: 3rem;
+  }
+
+  #calls-to-action {
+    .card {
+      height: 100%;
+    }
+  }
+
+  #news-section {
+    a {
+      text-decoration: none;
+    }
+  }
+
+  #testimonials-section .blockquote {
+    font-size: 1rem;
+  }
+}
+
+// Nav:
+nav.navbar {
+  a {
+    text-decoration: none;
+  }
+}
+
+.footer {
+  @media print {
+    display: none;
+  }
+  margin-top: 3rem;
+  background-color: $black;
+  font-size: 0.75rem;
+  color: $gray-400;
+  a {
+    color: $gray-400;
+  }
+}
+
+#meettaiwan-sponsorship {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  img {
+    margin-right: 0.5rem;
+  }
+}
+
+// vim: set et ts=2:

@@ -1,0 +1,24 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+<div class="jumbotron">
+  {% if not registered %}
+    <h1 class="display-3">Unregistered</h1>
+    <p class="lead">You are no longer registered for {{ WAFER_CONFERENCE_NAME }}.</p>
+  {% else %}
+    <h1 class="display-3">Unregister?</h1>
+    <p class="lead">Are you sure you want to un-register from {{ WAFER_CONFERENCE_NAME }}?</p>
+    {% if bursary %}
+      <p class="lead">This will cancel your bursary request.</p>
+    {% endif %}
+    <p class="lead">
+      <form method="post">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-warning" value="Unregister">
+      </form>
+    </p>
+  {% endif %}
+  <p class="lead">
+    <a class="btn btn-primary" href="{% url 'wafer_user_profile' username=user.username %}">Return to Profile</a>
+  </p>
+</div>
+{% endblock %}

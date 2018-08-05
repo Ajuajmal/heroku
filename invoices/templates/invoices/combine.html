@@ -1,0 +1,46 @@
+{% extends 'wafer/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h1>Combine Invoices</h1>
+  <p>
+    You can combine invoices from multiple attendees (including yourself, if
+    desired) into a single invoice, to be paid together.
+    To do this, you need the <b>shared</b> URL for each invoice.
+  </p>
+  <h2>Invoices to be combined:</h2>
+  <form method="post">
+    {% crispy form %}
+    <div id="formset">
+      {% crispy formset formset.form.helper %}
+    </div>
+    <input class="btn btn-info" type="button" value="Add Another Invoice" id="add-url">
+    <input class="btn btn-primary" type="submit" name="submit"
+           value="Generate Combined Invoice">
+  </form>
+{% endblock %}
+{% block extra_foot %}
+<script type="text/javascript">
+  'use strict';
+  $(function() {
+    $('#add-url').on('click', function(e) {
+      var forms = parseInt($('#id_form-TOTAL_FORMS').val());
+
+      var new_name = 'form-' + forms + '-url';
+
+      var form = $('#div_id_form-0-url').clone();
+      form.attr('id', 'div_id_' + new_name);
+
+      form.find('label').attr('for', '#id_' + new_name);
+
+      var input = form.find('input');
+      input.attr('id', 'id_' + new_name);
+      input.attr('name', new_name);
+      input.val('');
+
+      form.appendTo('#formset');
+
+      $('#id_form-TOTAL_FORMS').val(forms + 1);
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "wafer/base_form.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ WAFER_CONFERENCE_NAME }} - Check Out: {{ object.user.userprofile.display_name }}{% endblock %}
+{% block content %}
+<h1>{{ object.user.userprofile.display_name }}</h1>
+<div class="row">
+  <div class="col">
+    <h2>Check Out:</h2>
+    {% crispy form %}
+  </div>
+  <div class="col">
+    <h2>Keys issued:</h2>
+    <p>
+      Room Key:
+      {% if object.check_in.room_key %}
+         <i class="fas fa-check-circle" aria-hidden="true"></i>
+      {% else %}
+         <i class="fas fa-times" aria-hidden="true"></i>
+      {% endif %}
+    </p>
+    <p>
+      Key Card:
+      {% if object.check_in.key_card %}
+        {{ object.check_in.key_card }}
+      {% else %}
+         <i class="fas fa-times" aria-hidden="true"></i>
+      {% endif %}
+    </p>
+  </div>
+</div>
+{% endblock %}

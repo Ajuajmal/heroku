@@ -1,0 +1,56 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% block title %}{{ object.name }} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block content %}
+<section class="wafer">
+  {% if object.name == "Rex" or object.name == "Buzz" or object.name == "Bo" %}
+    <div id="video">
+        <div class="container">
+            <div class="video-container">
+                <video id="live-stream" class="video-js vjs-default-skin vjs-big-play-centered" controls width="1280" height="720">
+                    <source src="https://video.debconf.org/live/{{ object.name.lower }}.m3u8" type='application/x-mpegURL' label='High'>
+                </video>
+            </div>
+        </div>
+    </div>
+  {% endif %}
+  <h1>{{ object.name }}</h1>
+  <div>
+    {{ object.notes_html|safe }}
+  </div>
+  {% if object.name == "Rex" or object.name == "Buzz" or object.name == "Bo" %}
+    <h2>Other ways to watch the video</h2>
+    <div>
+      vlc, mplayer, and mpv understand HLS streaming.
+      Use the URL <code>https://video.debconf.org/redir/live/{{ object.name.lower }}.m3u8</code>.
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
+{% block extra_foot %}
+<script type="text/javascript">
+  'use strict';
+
+  function find_closest_video_mirror(callback) {
+    var element = $('#live-stream source');
+    $.ajax({
+      url: 'https://video.debconf.org/local-server',
+    }).done(function(country_code) {
+      var url = element[0].src;
+      url = url.replace(/(video)/, country_code + '.$1');
+      element.attr('src', url);
+      callback();
+    });
+  }
+
+  function init_video() {
+    var p = videojs('live-stream');
+    p.qualityLevels();
+    p.hlsSourceSelector();
+  };
+
+  $(function() {
+    find_closest_video_mirror(init_video);
+  });
+</script>
+{% endblock %}

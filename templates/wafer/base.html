@@ -1,0 +1,47 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title %}{{ WAFER_CONFERENCE_NAME }}{% endblock %}</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'css/wafer.css' %}" rel="stylesheet" media="screen">
+
+  {% include "favicons.html" %}
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% include "wafer/nav.html" %}
+  <div id="main" class="{% block main_class %}{% endblock %}">
+     {% if messages %}
+       <div class="messages container">
+         {% for message in messages %}
+           <div class="alert
+             {% if message.tags == 'error' %}
+               alert-danger
+             {% elif message.tags %}
+               alert-{{ message.tags }}
+             {% endif %}">
+             {{ message }}
+           </div>
+         {% endfor %}
+       </div>
+     {% endif %}
+
+     {% block jumbotron_content %}{% endblock %}
+
+     <div class="container {% block container_class %}{% endblock %}">
+       {% block content %}
+         <h1>{{ WAFER_CONFERENCE_NAME }}</h1>
+       {% endblock %}
+     </div>
+
+   </div>
+   {% include 'footer.html' %}
+
+   <script src="{% static 'js/debconf18.js' %}"></script>
+   {% block extra_foot %}{% endblock %}
+</body>
+</html>

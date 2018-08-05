@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), url(../fonts/OpenSans-Light.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Open Sans Light Italic'), url(../fonts/OpenSans-LightItalic.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), url(../fonts/OpenSans-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), url(../fonts/OpenSans-Italic.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), url(../fonts/OpenSans-Bold.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), url(../fonts/OpenSans-BoldItalic.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Condensed Light'), url(../fonts/OpenSans-CondLight.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Open Sans Condensed Light Italic'), url(../fonts/OpenSans-CondLightItalic.ttf);
+}
+
+@font-face {
+  font-family: 'Open Sans Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Condensed Bold'), url(../fonts/OpenSans-CondBold.ttf);
+}
+
+@font-face {
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Mono'), local('RobotoMono-Regular'), url(../fonts/RobotoMono-Regular.ttf);
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK TC';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Noto Sans CJK TC Regular'), url(../fonts/NotoSansCJKtc-Regular.otf);
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK TC';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Noto Sans CJK TC Bold'), url(../fonts/NotoSansCJKtc-Bold.otf);
+}

@@ -1,0 +1,31 @@
+<div class="row">
+  <div class="col">
+    <b>DebConf 18</b> <br>
+    c/o Software in the Public Interest, Inc. <br>
+    1732 1st Ave #20327 <br>
+    New York, NY 10128-5177 <br>
+    United States
+  </div>
+  <div>
+    {% if object.invoiced_entity %}
+      <b>{{ object.invoiced_entity }}</b><br>
+      for {{ object.recipient.get_full_name }}
+    {% else %}
+      <b>{{ object.recipient.get_full_name }}</b>
+    {% endif %}
+    {{ object.billing_address|linebreaks }}
+  </div>
+</div>
+<div class="row">
+  <div class="col text-right">
+    Hsinchu, {{ object.date | date }}
+  </div>
+</div>
+<div class="row justify-content-md-center">
+  <div class="col col-md-auto">
+    <h4>
+      Invoice {{ object.reference_number }}
+    </h4>
+  </div>
+</div>
+{% include 'invoices/includes/details.html' with lines=object.lines.all total=object.total total_twd=object.total_twd %}

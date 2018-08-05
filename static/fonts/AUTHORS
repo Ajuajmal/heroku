@@ -1,0 +1,9 @@
+Files: OpenSans-*
+Copyright: Digitized data copyright (c) 2010-2011, Google Corporation.
+License: Apache-2.0
+ See: OpenSans-LICENSE.txt
+
+Files: NotoSansCJKtc-*
+Copyright: Copyright 2018 The Noto Project Authors (github.com/googlei18n/noto-fonts)
+License: OFL-1.1
+ See: LICENSE_OFL.txt

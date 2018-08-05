@@ -1,0 +1,293 @@
+{% extends 'wafer/base.html' %}
+{% load countries %}
+
+{% block content %}
+<h3>Attendees</h3>
+<table class="table-sm table-hover">
+  <thead>
+    <tr><th>Total</th><th>Fully Registered</th><th>(Re)confirmed / invoice paid / bursary accepted</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>{{ attendees_count }}</td><td>{{ attendees_registered }}</td><td>{{ attendees_confirmed }}</td></tr>
+  </tbody>
+</table>
+<div class="accordion" id="attendee-statistics">
+  <div class="card">
+    <div class="card-header" id="headingFees">
+      <h4 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFees" aria-expanded="false" aria-controls="collapseFees">
+          Registration fees
+        </button>
+      </h4>
+    </div>
+    <div id="collapseFees" class="collapse" aria-labelledby="headingFees" data-parent="#attendee-statistics">
+      <div class="card-body">
+        <table class="table-sm table-hover">
+          <thead>
+            <tr><th>Type</th><th>Total</th><th>Paid</th></tr>
+          </thead>
+          <tbody>
+            {% for fee, counts in fees.items %}
+            <tr><th>{{fee}}</th><td>{{counts.all}}</td><td>{{counts.paid|default:""}}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingTshirts">
+      <h4 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTshirts" aria-expanded="false" aria-controls="collapseTshirts">
+          T-Shirt sizes
+        </button>
+      </h4>
+    </div>
+    <div id="collapseTshirts" class="collapse" aria-labelledby="headingTshirts" data-parent="#attendee-statistics">
+      <div class="card-body">
+        <table class="table-sm table-hover">
+          <thead>
+            <tr><th>Size</th><th>Straight cut (confirmed)</th><th>Fitted cut (confirmed)</th></tr>
+          </thead>
+          <tbody>
+            {% for size, counts in tshirts.items %}
+            <tr>
+              <th>{{size}}</th>
+              <td>{{counts.s_all|default:0}} ({{counts.s_confirmed|default:0}})</td>
+              <td>{{counts.w_all|default:0}} ({{counts.w_confirmed|default:0}})</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>Total</th>
+              <td>{{tshirts_total.s_all|default:0}}
+                ({{tshirts_total.s_confirmed|default:0}})</td>
+              <td>{{tshirts_total.w_all|default:0}}
+                ({{tshirts_total.w_confirmed|default:0}})</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingCountry">
+      <h4 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseCountry" aria-expanded="false" aria-controls="collapseCountry">
+          Statistics by country
+        </button>
+      </h4>
+    </div>
+    <div id="collapseCountry" class="collapse" aria-labelledby="headingCountry" data-parent="#attendee-statistics">
+      <div class="card-body">
+        <table class="table-sm table-hover">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Attendees</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for country, count in attendees_by_country %}
+            {% get_country country as country %}
+            <tr><td>{{ country.name }}</td><td>{{ count.all }} ({{ count.confirmed|default:0 }})</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingGender">
+      <h4 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseGender" aria-expanded="false" aria-controls="collapseGender">
+          Statistics by gender
+        </button>
+      </h4>
+    </div>
+    <div id="collapseGender" class="collapse" aria-labelledby="headingGender" data-parent="#attendee-statistics">
+      <div class="card-body">
+        <table class="table-sm table-hover">
+          <thead>
+            <tr>
+              <th>Gender</th>
+              <th>Attendees</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for gender, count in attendees_by_gender %}
+              <tr>
+                <td>
+                  {% for key, description in genders.items %}
+                    {% if key == gender %}
+                      {{ description }}
+                    {% endif %}
+                  {% endfor %}
+                </td>
+                <td>{{ count.all }} ({{ count.confirmed|default:0 }})</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingLanguage">
+      <h4 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseLanguage" aria-expanded="false" aria-controls="collapseLanguage">
+          Statistics by language
+        </button>
+      </h4>
+    </div>
+    <div id="collapseLanguage" class="collapse" aria-labelledby="headingLanguage" data-parent="#attendee-statistics">
+      <div class="card-body">
+        <table class="table-sm table-hover">
+          <thead>
+            <tr>
+              <th>Language</th>
+              <th>Attendees</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for language, count in attendees_by_language %}
+            <tr><td>{{ language }}</td><td>{{ count.all }} ({{ count.confirmed|default:0 }})</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<h3>Accommodation</h3>
+<p>Attendees registered for at least one night: {{accomm_total}} ({{accomm_confirmed}} confirmed)</p>
+<div class="card">
+  <div class="card-header" id="headingAccommDetails">
+    <h4 class="mb-0">
+      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseAccommDetails" aria-expanded="false" aria-controls="collapseAccommDetails">
+        Details
+      </button>
+    </h4>
+  </div>
+  <div id="collapseAccommDetails" class="collapse" aria-labelledby="headingAccommDetails">
+    <div class="card-body">
+      <table class="table-sm table-hover">
+        <thead>
+          <tr><th>Night of</th><th>Number of attendees (confirmed)</th></tr>
+        </thead>
+        <tbody>
+          {% for night, counts in accommodation.items %}
+          <tr>
+            <th>{{night}}</th>
+            <td>{{counts.all|default:0}} ({{counts.confirmed|default:0}})</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<h3>Food</h3>
+<div class="accordion" id="food-statistics">
+  <div class="card">
+    <div class="card-body">
+      <p>Attendees registered for at least one meal: {{food_total}} ({{food_confirmed}} confirmed)</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingFoodRestrictions">
+      <h4 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseFoodRestrictions" aria-expanded="false" aria-controls="collapseFoodRestrictions">
+          Food restrictions
+        </button>
+      </h4>
+    </div>
+    <div id="collapseFoodRestrictions" class="collapse" aria-labelledby="headingFoodRestrictions" data-parent="#food-statistics">
+      <div class="card-body">
+        <table class="table-sm table-hover">
+          <thead>
+            <tr>
+              <th>Restriction</th>
+              <th>Number of attendees (confirmed)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for restriction, counts in food_restrictions.items %}
+            <tr>
+              <th>{{restriction}}</th>
+              <td>{{counts.all|default:0}} ({{counts.confirmed|default:0}})</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header" id="headingMeals">
+      <h4 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseMeals" aria-expanded="false" aria-controls="collapseMeals">
+          Meal statistics
+        </button>
+      </h4>
+    </div>
+    <div id="collapseMeals" class="collapse" aria-labelledby="headingMeals" data-parent="#food-statistics">
+      <div class="card-body">
+        <table class="table-sm table-hover">
+          <thead>
+            <tr>
+              <th>Date</th>
+              {% for label in meal_labels %}
+              <th>{{ label }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for date, day_meals in meals.items %}
+            <tr>
+              <th>{{ date }}</th>
+              {% for counts in day_meals %}
+              <td>
+                {% if counts.all %}
+                {{ counts.all }} ({{ counts.confirmed|default:0 }})
+                {% endif %}
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<h3>Bursaries</h3>
+<table class="table-sm table-hover">
+  <thead>
+    <tr>
+      <th>Type</th>
+      {% for label in bursary_statuses %}
+      <th>{{ label }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for type, counters in bursaries_by_status.items %}
+    <tr>
+      <th>{{ type }}</th>
+      {% for count in counters.values %}
+      <td>{{ count|default:0 }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    <tr>
+      <th>Travel amount (USD)</th>
+      {% for amount in bursaries_travel.values %}
+      <td>{{ amount|default:0 }}</td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+
+{% endblock content %}

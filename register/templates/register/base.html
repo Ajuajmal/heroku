@@ -1,0 +1,54 @@
+{% extends "wafer/base_form.html" %}
+{% block title %}{{ WAFER_CONFERENCE_NAME }} Registration - {{ register.title }}{% endblock %}
+{% block content %}
+  {% block registration_h1 %}
+    <h1>Registration</h1>
+  {% endblock %}
+  <div class="row">
+    <div class="col-md-8">
+      {% block registration_h2 %}
+        <h2>{{ register.title }}</h2>
+      {% endblock %}
+      <form method="post" id="register">
+        {% csrf_token %}
+        {% block registration_page %}
+        {% endblock %}
+        <div class="progress mb-3">
+          <div class="progress-bar" role="progressbar"
+               aria-valuenow="{{ register.steps.step1 }}" aria-valuemin="0"
+               aria-valuemax="{{ register.steps.count }}"
+               style="width: {{ register.steps.percentage }}%;">
+            Page {{ register.steps.step1 }} of {{ register.steps.count }}
+          </div>
+        </div>
+        {% block save_buttons %}
+          <div>Save and continue to:</div>
+          {% if register.steps.step0 > 0 %}
+            <!-- This one catches the Enter key, even though Next Page isn't the
+                 first visible submit. -->
+            <input type="submit" id="hidden-next" value="Next page">
+            <button name="wizard_goto_step" type="submit" class="btn btn-secondary"
+                    value="0">First Page</button>
+            <button name="wizard_goto_step" type="submit" class="btn btn-secondary"
+                    value="{{ register.steps.prev }}">Previous Page</button>
+          {% endif %}
+          <input type="submit" class="btn btn-primary" value="Next Page">
+        {% endblock %}
+      </form>
+    </div>
+    <div class="col-md-4">
+      <h2>Registration Steps</h2>
+      <ol class="registration-steps">
+        {% for step in register.steps.links %}
+        <li class="{% if step.current %}current-step{% endif %}">
+            {% if step.accessible %}
+              <a href="{{ step.url }}">{{ step.title }}</a>
+            {% else %}
+              <a class="inaccessible-step">{{ step.title }}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+{% endblock %}

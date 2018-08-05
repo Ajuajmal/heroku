@@ -1,0 +1,43 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load news %}
+{% block title %}{% trans "News" %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block extra_head %}
+  <link rel="alternate" type="application/rss+xml" title="{{ CONFERENCE_NAME }} RSS Feed" href="{% url 'news_rss' %}">
+  <link rel="alternate" type="application/atom+xml" title="{{ CONFERENCE_NAME }} Atom Feed" href="{% url 'news_rss' %}">
+{% endblock extra_head %}
+{% block content %}
+<section class="wafer wafer-news">
+  <h1>{% trans 'News' %}</h1>
+  {% include "news/feed_snippet.html" %}
+</section>
+{% if is_paginated %}
+  <section class="wafer wafer-pagination">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="{% url 'news' page=page_obj.previous_page_number %}">&laquo;</a>
+        </li>
+      {% else %}
+        <li class="page-item" class="disabled">
+          <a class="page-link" href="#">&laquo;</a>
+        </li>
+      {% endif %}
+      {% for page in paginator.page_range %}
+        <li class="page-item">
+          <a class="page-link" href="{% url 'news' page=page %}">{{ page }}</a>
+        </li>
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="{% url 'news' page=page_obj.next_page_number %}">&raquo;</a>
+        </li>
+      {% else %}
+        <li class="page-item" class="disabled">
+          <a class="page-link" href="#">&raquo;</a>
+        </li>
+      {% endif %}
+    </ul>
+  </section>
+{% endif %}
+{% endblock %}

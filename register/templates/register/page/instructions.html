@@ -1,0 +1,42 @@
+{% extends "register/base.html" %}
+{% block registration_page %}
+<p>Thank you for your interest in attending {{ WAFER_CONFERENCE_NAME }}!</p>
+<p class="font-weight-bold">Please read the following instructions carefully:</p>
+<ol>
+  <noscript>
+    <li>
+      This registration form uses JavaScript.
+      Without it, you'll have to navigate the validation dragons without any
+      help.
+      And you won't be able to make payments through PayPal.
+    </li>
+  </noscript>
+  <li>
+    You aren't registered until you've finished the last page of the form.
+  </li>
+  <li>
+    All registration, accommodation and catering fees must be paid either
+    through PayPal's credit card processing (no PayPal account required) or in
+    person at the front desk upon arrival.
+  </li>
+  <li>
+    Please keep your registration information up to date.
+    You can make changes at any time through this form.
+  </li>
+  <li>
+    Registrations will need to be confirmed before June 21st.
+    We cannot guarantee availability of accommodation, catering or swag for
+    unconfirmed registrations.
+  </li>
+  <li>
+    Badges will be available for pick-up at the front desk.
+  </li>
+  <li>
+    The deadline to apply for a bursary is April 13th.
+    After this date, new bursary applications won't be considered.
+  </li>
+</ol>
+{% endblock %}
+{% block save_buttons %}
+  <input type="submit" class="btn btn-primary" value="Start Registration">
+{% endblock %}

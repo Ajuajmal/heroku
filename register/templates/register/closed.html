@@ -1,0 +1,9 @@
+{% extends "wafer/base.html" %}
+{% block content %}
+<div class="jumbotron">
+  <h1 class="display-3">Registration is <em>not</em> open</h1>
+  <p class="lead">
+    <a class="btn btn-primary" href="{% url 'wafer_user_profile' username=user.username %}">Return to Profile</a>
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'wafer/base.html' %}
+{% load i18n %}
+{% load news %}
+{% load sponsors %}
+{% load static from staticfiles %}
+{% block extra_head %}
+  <link rel="alternate" type="application/rss+xml" title="{{ WAFER_CONFERENCE_NAME }} RSS Feed" href="{% url 'news_rss' %}">
+  <link rel="alternate" type="application/atom+xml" title="{{ WAFER_CONFERENCE_NAME }} Atom Feed" href="{% url 'news_rss' %}">
+{% endblock%}
+
+{% block main_class %}index{% endblock %}
+{% block jumbotron_content %}
+  <div class="jumbotron jumbotron-fluid background-kochi">
+    <div class="container">
+      <h1 class="display-3">MiniDebConf in Cochin,India</h1>
+      <p class="lead">The Annual Mini Debian Conference will be held in Cochin, India, from September 15 to September 16, 2018.</p>
+      <p>It will be preceded by DebUtsav</p>
+    </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div id="calls-to-action" class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">What is Mini Debian Conference</h2>
+          <div class="card-text">
+            <p>
+              MiniDebConfs are local meetings organized by Debian project members to achieve similar objectives to those of the DebConf, but on a regional context.
+            </p>
+          </div>
+        </div>
+        <div class="card-footer">
+         <!-- <a class="btn btn-info" href="{% url 'wafer_page' 'cfp' %}">Read the Call for Proposals</a>
+          <a class="btn btn-success" href="{% url 'wafer_talk_submit' %}">Submit an event</a> !-->
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">Registration</h2>
+          <div class="card-text">
+            <p>
+              {% if WAFER_REGISTRATION_OPEN %}
+                Registration is open.
+              {% else %}
+                Registration will open by the end of February.
+              {% endif %}
+              Bursary applications have closed, but at-cost food and
+              accommodation is still available.
+            </p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a class="btn btn-info" href="{% url 'wafer_page' 'schedule/important-dates' %}">Important dates</a>
+          {% if WAFER_REGISTRATION_OPEN %}
+            <a class="btn btn-success" href="{% url 'register' %}">
+              {% if user.userprofile.is_registered %}
+                Update Registration
+              {% else %}
+                Register Now
+              {% endif %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- News section -->
+  <div id="news-section">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 id="news">Announcements</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        {% recent_news 3 %}
+        <div id="more-news-link">
+          <a href="{% url 'news' %}" class="btn btn-primary">More Announcements</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- News End -->
+
+  <!-- Sponsors -->
+  <div id="sponsors-section">
+    <div class="row">
+      <div class="col-lg-12">
+         <h1 id="sponsors">Sponsors</h1>
+      </div>
+    </div>
+    {% sponsors %}
+  </div>
+  <!-- End Sponsors -->
+
+  <!-- Testimonials -->
+  <div id="testimonials-section">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 id="testimonials">Testimonials</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-7">
+        <div class="bs-component">
+          <blockquote class="blockquote">
+            <p>
+              DebConf has become one of the most important
+              conferences on my annual calendar, <b>and has
+              inspired me over the last two years to become more
+              involved with Debian</b>.
+              Debian is one of the most democratic and
+              egalitarian software freedom communities in
+              existence today.
+              <b>DebConf, as an annual event, showcases that
+              community and enables it to flourish</b>.
+              DebConf16 was no exception.
+              I encourage anyone who wants to examine first-hand
+              a good model of a functioning Free Software
+              community attend DebConf.
+            </p>
+            <p class="signature">Bradley M. Kuhn, Software Freedom Conservancy</p>
+          </blockquote>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="bs-component">
+          <blockquote class="blockquote blockquote-reverse">
+            <p>
+              DebConf is the annual conference for one of the
+              largest Open Source projects.
+              By annually sponsoring DebConf, credativ helps to
+              keep this important conference successful.
+              Being present at DebConf enables us to <b>connect,
+              stay in touch and collaborate with some of the
+              brightest minds in the industry</b>, both at a
+              management and technical level.
+            </p>
+            <p class="signature">Michael Meskes, credativ GmbH</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Testimonials -->
+{%endblock%}

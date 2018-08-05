@@ -1,0 +1,9 @@
+{% extends "register/form.html" %}
+{% block extra_foot %}
+  <script type="text/javascript">
+    'use strict';
+    $(function() {
+      hookDependentVisibility($('#tshirt-cut'), $('#tshirt-size'));
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,23 @@
+{
+  "name": "dc18.dc.o",
+  "private": true,
+  "version": "0.0.0",
+  "devDependencies": {
+    "@fortawesome/fontawesome-free-webfonts": "1.0.x",
+    "bootstrap": "4.1.x",
+    "eonasdan-bootstrap-datetimepicker": "git+https://github.com/Eonasdan/bootstrap-datetimepicker.git#4.17.47",
+    "gulp": "3.9.x",
+    "gulp-concat": "2.6.x",
+    "gulp-sass": "3.1.x",
+    "gulp-sourcemaps": "2.6.x",
+    "gulp-uglify": "3.0.x",
+    "jquery": "3.2.x",
+    "moment": "^2.10",
+    "normalize.css": "8.0.0",
+    "popper.js": "1.14.x",
+    "video.js": "6.4.x",
+    "videojs-contrib-hls": "^5.8.2",
+    "videojs-hls-source-selector": "0.0.7",
+    "videojs-contrib-quality-levels": "2.0.3"
+  }
+}

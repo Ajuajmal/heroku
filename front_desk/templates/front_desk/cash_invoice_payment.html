@@ -1,0 +1,8 @@
+{% extends "wafer/base_form.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ WAFER_CONFERENCE_NAME }} - Cash Payment {{ object.reference_number }}{% endblock %}
+{% block content %}
+<h1>Cash Payment - {{ object.recipient.userprofile.display_name }}</h1>
+<h2>Invoice: {{ object.reference_number }}</h2>
+{% crispy form %}
+{% endblock %}

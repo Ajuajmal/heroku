@@ -1,0 +1,67 @@
+{% extends 'wafer/base_form.html' %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+{% load static from staticfiles %}
+{% load wafer_crispy %}
+{% load wafer_sso %}
+{% block title %}Login - {{ WAFER_CONFERENCE_NAME }}{% endblock title %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h2>Debian Members &amp; Contributors:</h2>
+      <p>
+        If you are a Debian Member or have an account on
+        <a href="https://alioth.debian.org/">alioth</a>, you can use
+        Debian SSO.
+      </p>
+      <div class="row" id="login-debian-logos">
+        <div class="col-sm-3">
+          <img class="img-fluid" src="{% static 'img/debian-openlogo.svg' %}">
+        </div>
+        <div class="col-sm-9">
+          <img class="img-fluid" src="{% static 'img/alioth.png' %}">
+        </div>
+      </div>
+      <div class="vertically-padded">
+        <a class="btn btn-secondary" role="button" href="https://sso.debian.org/" target="blank">
+          <i class="fas fa-external-link-alt"></i>
+          Generate an SSO certificate
+        </a>
+        <a class="btn btn-info" role="button" href="https://wiki.debian.org/DebianSingleSignOn#Documentation_for_Users" target="blank">
+          <i class="fas fa-external-link-alt"></i>
+          Debian SSO Documentation
+        </a>
+      </div>
+      <p>Once you have a Debian SSO client certificate installed, you can:</p>
+      <div class="vertically-padded">
+        <a class="btn btn-primary" role="button" href="{% wafer_sso_url 'debian' %}">
+          Login with Debian SSO
+        </a>
+      </div>
+    </div>
+    <div class="col-md-6">
+      {% url 'registration_register' as signup_url %}
+      {% url 'auth_password_reset' as pass_reset_url %}
+      <h2>Newcomers to Debian:</h2>
+      <p>
+        You don't need to have a Debian or Alioth account, you can also
+        <a href="{{ signup_url }}">sign up</a> with a username and
+        password, and use them to login.
+      </p>
+      <div class="vertically-padded">
+        <a class="btn btn-secondary" role="button" href="{{ signup_url }}">
+          Sign Up without SSO
+        </a>
+      </div>
+      <div class="vertically-padded">
+        {% wafer_form_helper 'wafer.registration.forms.LoginFormHelper' as form_helper %}
+        {% crispy form form_helper %}
+        <a class="btn btn-secondary" role="button" href="{{ pass_reset_url }}">
+          Forgot my password
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+Dear {{ object.user.get_full_name }},
+
+The bursaries team has updated the status of your bursary request for {{ WAFER_CONFERENCE_NAME }}.
+{% if object.request_travel %}
+Travel bursary
+--------------
+{% if object.travel_status == 'pending' %}
+We're glad to announce that your request for a travel bursary has been granted!
+
+You need to accept or withdraw it before {{ object.travel_accept_before|date }}.
+Please make sure to do so as soon as possible in your profile[1] on the DebConf
+website. You also need to update the amount you're requesting to match your
+final travel expenses. This will allow us to grant bursaries to further
+applicants as we get a better estimation of our budget.
+{% elif object.travel_status == 'accepted' %}
+You have accepted your travel bursary grant. Please update the amount of your
+expenses on your DebConf website profile[1], to allow us to get a better view of
+our budget and grant bursaries to further applicants.
+{% elif object.travel_status == 'ranked' %}
+Your request for a travel bursary has been evaluated and ranked. However, we are
+unable to grant it at this time: our travel budget is very limited, and we had
+to defer a lot of strong applications. We will let you know as soon as possible,
+hopefully before the end of June, if we can grant you the amount you have
+requested, as our budget evolves and higher ranked applicants finalize their
+plans.
+{% elif object.travel_status == 'denied' %}
+We're sorry to tell you that we are unable to grant you travel assistance for
+{{ WAFER_CONFERENCE_NAME }}. We had 120 requests for travel sponsorship, and budget for only 55
+of those (counting our Contributor and Diversity travel budget lines), so a lot
+of strong applications could not be funded. For details on the decision process,
+see the DebConf wiki:
+
+https://wiki.debconf.org/wiki/DebConf18/FAQ#How_were_the_travel_bursaries_allocated.3F
+{% endif %}{% endif %}
+{% if object.request_food %}
+Food bursary
+------------
+{% if object.food_status == 'pending' %}
+Your request for food during the conference has been granted!
+
+You need to accept or withdraw it before {{ object.food_accept_before|date }}.
+Please make sure to do so as soon as possible in your profile[1] on the DebConf
+website.
+{% elif object.food_status == 'accepted' %}
+You have accepted your food bursary grant.
+{% elif object.food_status == 'ranked' and object.request_travel %}
+You have told us that you would be completely unable to come to DebConf if you
+weren't granted a travel bursary. Your food bursary is therefore pending an
+update on the travel bursaries front. If you're able to join us nonetheless,
+let the bursaries team know so we can update your "level of need". Note that
+this will be reflected in your travel bursary ranking.
+{% elif object.food_status == 'ranked' %}
+You have told us that you would be unable to come to DebConf if you were not
+granted travel assistance; If you are able to make it and want to request food
+assistance, just let us know and we will update your records.
+{% elif object.food_status == 'denied' %}
+We're sorry to let you know that we are unable to grant you a food bursary for
+{{ WAFER_CONFERENCE_NAME }}.
+{% endif %}{% endif %}
+{% if object.request_accommodation %}
+Accommodation bursary
+---------------------
+{% if object.accommodation_status == 'pending' %}
+Your request for accommodation during the conference has been granted!
+
+You need to accept or withdraw it before {{ object.accommodation_accept_before|date }}.
+Please make sure to do so as soon as possible in your profile[1] on the DebConf
+website.
+{% elif object.accommodation_status == 'accepted' %}
+You have accepted your accommodation bursary grant.
+{% elif object.accommodation_status == 'ranked' and object.request_travel %}
+You have told us that you would be completely unable to come to DebConf if you
+weren't granted a travel bursary. Your accommodation bursary is therefore
+pending an update on the travel bursaries front. If you're able to join us
+nonetheless, let the bursaries team know so we can update your "level of need".
+Note that this will be reflected in your travel bursary ranking.
+{% elif object.accommodation_status == 'ranked' %}
+You have told us that you would be unable to come to DebConf if you were not
+granted travel assistance; If you are able to make it and want to request
+accommodation assistance, just let us know and we will update your records.
+{% elif object.accommodation_status == 'denied' %}
+We're sorry to let you know that we are unable to grant you an accommodation
+bursary for {{ WAFER_CONFERENCE_NAME }}.
+{% endif %}{% endif %}
+
+You can review the full status of your bursary request in your profile[1] on the
+DebConf website.
+
+[1] {{ profile_url }}
+-- 
+The {{ WAFER_CONFERENCE_NAME }} bursaries team

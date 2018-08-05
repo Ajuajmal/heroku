@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load markitup_tags %}
+<div class="list-group">
+  {% for story in stories %}
+    <a href="{{ story.get_absolute_url }}" class="list-group-item list-group-item-action">
+      <h4 class="list-group-item-heading">{{ story.date }}: {{ story.title }}</h4>
+      <div class="list-group-item-text">
+        {{ story.body | render_markup | striptags | truncatewords_html:50 | safe }}
+      </div>
+    </a>
+  {% empty %}
+     <p>{% trans "No news is good news." %}</p>
+  {% endfor %}
+</div>

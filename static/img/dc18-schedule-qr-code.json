@@ -1,0 +1,26 @@
+{
+  "version": 2018072100,
+  "url": "https://debconf18.debconf.org/schedule/pentabarf.xml",
+  "title": "DebConf 18",
+  "start": "2018-07-28",
+  "end": "2018-08-05",
+  "metadata": {
+    "icon": "https://debconf18.debconf.org/static/img/favicon/favicon-196.9a9823c0039b.png",
+    "links": [
+      {
+        "url": "https://debconf18.debconf.org/",
+        "title": "Website"
+      },
+      {
+        "url": "https://deb.li/dc18travel",
+        "title": "Arrival Info",
+        "type": "application/pdf"
+      },
+      {
+        "url": "https://debconf18.debconf.org/static/img/venue-map.7584e6726ad8.png",
+        "title": "Venue Map",
+        "type": "image/jpeg"
+      }
+    ]
+  }
+}

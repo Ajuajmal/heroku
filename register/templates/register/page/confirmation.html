@@ -1,0 +1,56 @@
+{% extends "register/base.html" %}
+{% block registration_h1 %}{% endblock %}
+{% block registration_h2 %}{% endblock %}
+{% block registration_page %}
+  <div class="jumbotron">
+    {% if attendee %}
+      <h2 class="display-3">You are Registered</h2>
+      <p class="lead">Your registration is complete and has been saved.</p>
+      <p class="lead">We look forward to seeing you in Hsinchu.</p>
+    {% else %}
+      <h2 class="display-3">You are not Registered</h2>
+    {% endif %}
+  </div>
+  {% if attendee.billable %}
+    {% if attendee.paid %}
+      <div class="alert alert-success" role="alert">
+        <h2 class="alert-heading">Payment</h2>
+        <p>
+          <i class="fas fa-check"></i>
+          Your registration is paid for, thank you.
+        </p>
+      </div>
+    {% else %}
+      <div class="alert alert-warning" role="alert">
+        <h2 class="alert-heading">Not Yet Paid</h2>
+        <p>
+          Your registration is not yet paid for, please make a payment.
+        </p>
+        {% for invoice in attendee.new_invoices.all %}
+          <a class="btn btn-info" href="{{ invoice.get_absolute_url }}">View Invoice {{ invoice.reference_number }}</a>
+        {% empty %}
+          <p>
+            You need to go back to the
+            <a href="{% url 'register-step-9' %}">billing page</a>
+            to create an invoice.
+          </p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endif %}
+  {% if attendee %}
+    <div class="alert alert-info">
+      <h2 class="alert-heading">Day Trips</h2>
+      <p>
+        If you haven't yet, you should
+        <a href="https://wiki.debconf.org/wiki/DebConf18/DayTrip">sign up for a
+          day trip option</a>.
+        At least one of the day trips requires advance registration, and will
+        fill up long before DebConf.
+      </p>
+    </div>
+  {% endif %}
+{% endblock %}
+{% block save_buttons %}
+  <input type="submit" class="btn btn-primary" value="Return to profile">
+{% endblock %}

@@ -1,0 +1,33 @@
+{% if item.talk %}
+  {% if item.talk.cancelled %}
+    <del class="talk-cancelled">
+  {% endif %}
+  <a href="{{ item.get_url }}">{{ item.get_details|escape }}</a>
+  {% if item.talk.track.name != 'Other' %}
+    <span class="sr-only">(in track "{{item.talk.track.name}}")</span>
+  {% endif %}
+  <br>
+  by {{ item.talk.get_authors_display_name }}
+  <br>
+  {% if item.venue.order <= 3 and item.talk.video %}
+  {#{% if item.venue.order <= 3 and item.talk.video and item.talk.task_set.count %}#}
+    <i aria-hidden class="fas fa-video" title="video stream expected"></i>
+    <span class="sr-only">Video stream expected</span>
+  {% else %}
+    <span aria-hidden class="fa-stack" title="no video stream expected">
+      <i class="fas fa-video fa-stack-1x"></i>
+      <i class="fas fa-ban fa-stack-2x text-danger"></i>
+    </span>
+    <span class="sr-only">No video stream expected</span>
+  {% endif %}
+  {% if item.talk.cancelled %}
+    </del>
+  {% endif %}
+{% elif item.get_url %}
+  <a href="{{ item.get_url }}">{{ item.get_details|escape }}</a>
+  {% if item.page and item.page.people.exists %}
+    by {{ item.page.get_people_display_names }}
+  {% endif %}
+{% else %}
+  {{ item.get_details|escape }}
+{% endif %}

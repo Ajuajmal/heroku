@@ -1,0 +1,14 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>{% block title %}{{ WAFER_CONFERENCE_NAME }} Badge{% endblock %}</title>
+        <link href="{% static 'css/badges.css' %}" rel="stylesheet">
+    </head>
+    <body class="A4">
+        {% block body %}
+        {% endblock body %}
+    </body>
+</html>

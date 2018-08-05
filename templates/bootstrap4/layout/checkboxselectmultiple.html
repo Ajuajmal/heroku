@@ -1,0 +1,81 @@
+{% load crispy_forms_filters %}
+{% load l10n %}
+
+<div class="{{ field_class }}"{% if flat_attrs %} {{ flat_attrs|safe }}{% endif %}>
+  {% include 'bootstrap4/layout/field_errors_block.html' %}
+  {% if field.name == 'meals' %}
+    <table class="table table-sm table-hover">
+      <thead>
+        <tr>
+          <th>
+            <i class="far fa-square select-all" aria-hidden="true"></i>
+            Select All
+          </th>
+          <th>Date</th>
+          <th>Breakfast</th>
+          <th>Lunch</th>
+          <th>Dinner</th>
+        </tr>
+      </thead>
+      {% for choice in field.field.choices %}
+        {% if forloop.counter0|divisibleby:3 %}
+          <tr>
+            <td>
+              <i class="far fa-square select-day" aria-hidden="true"></i>
+            </td>
+            <td>
+              {{ choice.0|slice:"-10:" }}
+            </td>
+        {% endif %}
+            <td>
+              <div class="checkbox">
+                <input type="checkbox"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+              </div>
+            </td>
+        {% if forloop.counter0|add:1|divisibleby:3 %}
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  {% elif field.name == 'nights' %}
+    <table class="table table-sm table-hover">
+      <thead>
+        <tr>
+          <th>Night of</th>
+          <th>Accommodation</th>
+        </tr>
+      </thead>
+      <tr>
+        <td></td>
+        <td>
+          <div class="btn btn-secondary accomm-select-all">
+            Select All:
+            <i class="far fa-square select-all" aria-hidden="true"></i>
+          </div>
+        </td>
+      </tr>
+      {% for choice in field.field.choices %}
+        <tr>
+          <td>
+            {{ choice.0|slice:"-10:" }}
+          </td>
+          <td>
+            <div class="checkbox">
+              <input type="checkbox"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    {% for choice in field.field.choices %}
+      {% if not inline_class %}<div class="checkbox">{% endif %}
+        <label class="{% if inline_class %}checkbox-{{ inline_class }}{% endif %}">
+            <input type="checkbox"{% if choice.0 in field.value or choice.0|stringformat:"s" in field.value or choice.0|stringformat:"s" == field.value|stringformat:"s" %} checked="checked"{% endif %} name="{{ field.html_name }}" id="id_{{ field.html_name }}_{{ forloop.counter }}" value="{{ choice.0|unlocalize }}" {{ field.field.widget.attrs|flatatt }}>
+            {{ choice.1|unlocalize }}
+        </label>
+      {% if not inline_class %}</div>{% endif %}
+    {% endfor %}
+  {% endif %}
+  {% include 'bootstrap4/layout/help_text.html' %}
+</div>

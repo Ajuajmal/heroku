@@ -1,0 +1,104 @@
+{% extends "wafer/base.html" %}
+{% block title %}{{ WAFER_CONFERENCE_NAME }} - Invoice {{ object.reference_number }}{% endblock %}
+{% block content %}
+{% include 'invoices/includes/invoice.html' %}
+<div class="row d-print-none">
+  <div class="col-md">
+    {% if object.status == 'new' %}
+      {% if not using_signed_url %}
+        <div class="card border-info mb-3">
+          <h4 class="card-header bg-info">Forward Invoice:</h4>
+          <div class="card-body">
+            Is somebody else going to pay this on your behalf?<br>
+            Send them
+            <a href="{{ object.get_signed_url }}">this URL
+              <i class="fas fa-link"></i></a>.<br>
+            They will be able to combine this with other invoices, and pay them in
+            a single payment, if desired.
+          </div>
+        </div>
+        <div class="card border-danger mb-3">
+          <h4 class="card-header bg-danger">Danger Zone:</h4>
+          <div class="card-body">
+            <p>
+              If you have modified your registration and the invoice is no longer
+              correct, you may cancel it and re-create it.
+            </p>
+            <form action={% url 'invoices:cancel' reference_number=object.reference_number %} method="post">
+              {% csrf_token %}
+              <input type="submit" class="btn btn-warning" value="Cancel Invoice">
+            </form>
+          </div>
+        </div>
+      {% elif not object.compound %}
+        <div class="card border-info mb-3">
+          <h4 class="card-header bg-info">Combine Invoices:</h4>
+          <div class="card-body">
+            <p>
+              If you want to pay for multiple invoices, together, you can combine
+              them into a single invoice.
+            </p>
+            <a href="{% url 'invoices:combine' %}?invoice={{ view.request.build_absolute_uri|urlencode }}"
+               class="btn btn-warning">Combine Invoices</a>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+  <div class="col-md">
+    {% if object.status != 'canceled' %}
+      <div class="card border-success mb-3">
+        <h4 class="card-header bg-success">Payment:</h4>
+        <div class="card-body">
+          {% if object.status == 'new' %}
+            <div class="text-center">
+              {{ form.render }}
+            </div>
+            <p>
+              <strong>Note:</strong>
+              You don't need a PayPal account, they'll happily take payment from
+              your card, without any account. We're just using them as a payment
+              processor.
+            </p>
+            <p>
+              At the end of the payment process, they'll try to make you create
+              an account, you can click "Not Now".
+            </p>
+            <p>
+              If you don't see a PayPal button above, and use NoScript, Request
+              Policy, or some similar browser plugin, you may need to whitelist
+              this site in it.
+            </p>
+          {% elif object.status == 'pending' %}
+            <p>Waiting for PayPal payment confirmation</p>
+          {% elif object.status == 'paid' %}
+            <p>
+              Payment received via PayPal on {{ object.last_update | date }} <br>
+              PayPal transaction number {{ object.transaction_id }}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="card border-danger mb-3">
+        <h4 class="card-header bg-danger">Cancelled!</h4>
+        <div class="card-body">
+          <p>Cancelled on {{ object.last_update | date }}</p>
+        </div>
+      </div>
+    {% endif %}
+    <div class="mb-3 text-right">
+      <a class="btn btn-warning print-button" href="">Print</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_foot %}
+  <script type="text/javascript">
+    $(function() {
+      $('.print-button').click(function() {
+        window.print();
+      });
+    });
+  </script>
+{% endblock %}

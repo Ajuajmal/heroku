@@ -1,0 +1,66 @@
+{% extends "wafer/base_form.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ WAFER_CONFERENCE_NAME }} - Front Desk{% endblock %}
+{% block content %}
+<h1>Front Desk</h1>
+{% crispy form %}
+{% if results %}
+  <h2>Attendee{{ num_results|pluralize }}:</h2>
+  {% if num_results > results|length %}
+    <div>
+      Only showing {{ results|length }} (of {{ num_results }}).
+      Please be more specific.
+    </div>
+  {% endif %}
+  <table class="table table-striped">
+    <thead>
+      <th>Username</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Arrival</th>
+      <th>Confirmed</th>
+      <th>Paid</th>
+      <th>Check In</th>
+    </thead>
+    {% for attendee in results %}
+      <tr>
+        <td>{{ attendee.user.username }}</td>
+        <td>{{ attendee.user.userprofile.display_name }}</td>
+        <td>{{ attendee.user.email }}</td>
+        <td>{{ attendee.arrival }}</td>
+        <td class="boolean">
+          {% if attendee.reconfirm %}
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+          {% else %}
+            <i class="fas fa-times" aria-hidden="true"></i>
+          {% endif %}
+        </td>
+        <td class="boolean">
+          {% if attendee.paid %}
+            <i class="fas fa-check-circle" aria-hidden="true"></i>
+          {% elif attendee.paid == False %}
+            <i class="fas fa-times" aria-hidden="true"></i>
+          {% else %}
+            Free
+          {% endif %}
+        </td>
+        <td>
+          {% if attendee.check_in %}
+            <a href="{% url 'front_desk.check_in' username=attendee.user.username %}"
+               class="btn btn-warning">Edit</a>
+            <a href="{% url 'front_desk.check_out' username=attendee.user.username %}"
+               class="btn btn-danger">Check-Out</a>
+          {% else %}
+            <a href="{% url 'front_desk.check_in' username=attendee.user.username %}"
+               class="btn btn-primary">Check-In</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}
+{% if view.request.GET.q %}
+  <h2>Not Found?</h2>
+  <a class="btn btn-danger" href="{% url 'front_desk.register' %}">Register On-site</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,92 @@
+{% load countries %}{% autoescape off %}Thank you for registering for {{ WAFER_CONFERENCE_NAME }}
+
+We have {% if fresh_registration %}received{% else %}updated{% endif %} your registration.
+You can come back and edit your registration, at any time (until
+registration closes).
+
+The details we currently have for you are:
+Name: {{ profile.display_name }}
+eMail: {{ user.email }}
+Contact Number: {{ profile.contact_number }}
+Nametag Line 2: {{ attendee.nametag_2 }}
+Nametag Line 3: {{ attendee.nametag_3 }}
+Emergency Contact:
+{{ attendee.emergency_contact }}
+
+Announce Arrival on IRC: {{ attendee.announce_me|yesno }}
+Subscribe to mailing lists:
+  debconf-announce: {{ attendee.register_announce|yesno }}
+  debconf-discuss: {{ attendee.register_discuss|yesno }}
+Agree to Code of Conduct: {{ attendee.coc_ack|yesno }}
+
+Conference Fee: {{ fee }}
+Arrival: {{ attendee.arrival|date:"DATETIME_FORMAT" }}
+Departure: {{ attendee.departure|date:"DATETIME_FORMAT" }}
+
+T-Shirt: {% if attendee.t_shirt_cut %}{{ t_shirt_cut }}: {{ t_shirt_size }}{% else %}No{% endif %}
+Gender: {{ gender }}
+Country: {% if attendee.country != '__' %}{% get_country attendee.country as country %}{{ country.name }}{% else %}Decline to state{% endif %}
+Languages Spoken: {{ attendee.languages }}
+PGP Keysigning Keys:
+{{ attendee.pgp_fingerprints|default:"None submitted" }}
+Notes:
+{{ attendee.notes }}
+
+== Bursary ==
+{% if bursary.request_any %}
+Requested for food: {{ bursary.request_food|yesno }}
+Requested for accommodation: {{ bursary.request_accommodation|yesno }}
+Requested for travel: {{ bursary.request_travel|yesno }}
+Debian Contributions:
+{{ bursary.reason_contribution }}
+Plans for DebConf:
+{{ bursary.reason_plans }}{% if bursary.reason_diversity %}
+Diversity Eligibility:
+{{ bursary.reason_diversity }}
+{% endif %}{% if bursary.request_travel %}
+Travel Cost: $ {{ bursary.travel_bursary }} (USD)
+Travelling From: {{ bursary.travel_from }}
+Level of Need: {{ bursary_need }}{% endif %}
+{% else %}
+No Bursary Request.
+{% endif %}
+
+== Food ==
+{% if food %}
+Meals Requested:
+{% regroup food.meals.all by date as meals_by_day %}{% for day in meals_by_day %}{{ day.grouper|date:"SHORT_DATE_FORMAT" }}: {% for meal in day.list %}{{ meal.meal }} {% endfor %}
+{% endfor %}
+Diet: {{ diet }}
+Gluten Free: {{ food.gluten_free|yesno }}{% if food.special_diet %}
+Special Diet: {{ food.special_diet }}
+{% endif %}
+{% else %}
+No Food Requested.
+{% endif %}
+
+== Accommodation ==
+{% if accomm %}
+Nights Requested:
+{% for night in accomm.nights.all %}  {{ night.date|date:"SHORT_DATE_FORMAT" }}
+{% endfor %}{% if accomm.requirements %}
+Accommodation Requirements:
+{{ accomm.requirements }}
+{% endif %}{% if accomm.special_needs %}
+Special Needs:
+{{ accomm.special_needs }}
+{% endif %}{% if accomm.family_usernames %}
+Family Accompanying:
+{{ accomm.family_usernames }}
+{% endif %}{% if accomm.childcare %}
+Childcare Needs:
+{{ accomm.childcare_needs }}
+Childcare Details:
+{{ accomm.childcare_details }}
+{% endif %}
+{% else %}
+No Accommodation Requested.
+{% endif %}
+
+Regards,
+
+The {{ WAFER_CONFERENCE_NAME }} registration team.{% endautoescape %}

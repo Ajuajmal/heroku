@@ -1,0 +1,19 @@
+<section class="wafer wafer-sponsors">
+  {% for package in packages.all %}
+    {% if package.order <= 4 %}
+      <h2>{{ package.name }} Sponsors</h2>
+      <div class="row">
+        {% for sponsor in package.sponsors.all %}
+          <div class="col-lg-{% if package.name == 'Platinum'%}6{% elif package.name == 'Gold' %}3{% else %}2{% endif %}">
+            <div class="sponsors-{{package.name | lower }}">
+              <a href="{{ sponsor.url }}">
+                <img src="{{ sponsor.files.first.item.url }}"
+                     alt="{{ sponsor.name }}">
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</section>

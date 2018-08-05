@@ -1,0 +1,69 @@
+{% extends "register/base.html" %}
+{% load crispy_forms_tags %}
+{% block registration_page %}
+  {% if not attendee.billable %}
+    <div class="alert alert-info" role="alert">
+      As there is nothing to invoice, we can skip this step.
+    </div>
+  {% elif attendee.paid %}
+    <div class="alert alert-success" role="alert">
+      <i class="fas fa-check"></i>
+      Your registration is paid for, thank you.
+    </div>
+  {% elif will_reinvoice %}
+    <div class="alert alert-warning" role="alert">
+      As your previous invoice is now incorrect we will cancel it and issue
+      this new one.
+    </div>
+  {% elif attendee.new_invoices.exists %}
+    <div class="alert alert-warning" role="alert">
+      There is already an outstanding invoice for your attendance.<br>
+      Please pay or cancel it.
+    </div>
+    <ul>
+      {% for invoice in attendee.new_invoices.all %}
+        <li>
+          <a class="btn btn-info" href="{{ invoice.get_absolute_url }}">
+            View Invoice {{ invoice.reference_number }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% if invoice %}
+    <div class="alert alert-info" role="alert">
+      Please check the invoice below.<br>
+      On the next step, we'll issue it.
+    </div>
+    <div class="jumbotron">
+      <h2>Pro-Forma Invoice</h2>
+      <table class="register-invoice">
+        <thead>
+          <th>Description</th>
+          <th>Unit Price</th>
+          <th>Qty</th>
+          <th>Sub-Total</th>
+        </thead>
+        {% for line in invoice.lines %}
+          <tr class="line">
+            <td>{{ line.description }}</td>
+            <td>$&nbsp;{{ line.unit_price }}</td>
+            <td>{{ line.quantity }}</td>
+            <td>$&nbsp;{{ line.total }}</td>
+          </tr>
+        {% endfor %}
+        <tr class="total">
+          <th>Total (USD)</th>
+          <td colspan="3">$&nbsp;{{ invoice.total }}</td>
+        </tr>
+        <tr class="total">
+          <th>Total (TWD)</th>
+          <td colspan="3">NT$&nbsp;{{ invoice.total_twd }}</td>
+        </tr>
+      </table>
+    </div>
+  {% endif %}
+  {% if attendee.billable %}
+    {% crispy form %}
+  {% endif %}
+{% endblock %}

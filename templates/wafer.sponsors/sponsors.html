@@ -1,0 +1,10 @@
+{% extends "wafer/base.html" %}
+{% load i18n %}
+{% load sponsors %}
+{% block title %}{% trans 'Our Sponsors' %} - {{ WAFER_CONFERENCE_NAME }}{% endblock %}
+{% block content %}
+<h1>{% trans 'Our Sponsors' %}</h1>
+{% sponsors %}
+<p><strong>Thank you</strong> to all our generous sponsors whose support make this event possible.</p>
+<p>Interested in <a href="/sponsors/become-a-sponsor/">becoming a sponsor</a>?</p>
+{% endblock %}

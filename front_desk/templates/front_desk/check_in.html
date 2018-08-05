@@ -1,0 +1,79 @@
+{% extends "wafer/base_form.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ WAFER_CONFERENCE_NAME }} - Check In: {{ object.user.userprofile.display_name }}{% endblock %}
+{% block content %}
+<h1>{{ object.user.userprofile.display_name }}</h1>
+<a href="{% url 'badges.check_in' username=object.user.username %}"
+   target="_blank"
+   class="btn btn-primary">Print badge</a>
+{% if meals %}
+<h2>Meals</h2>
+<table>
+    <thead><th>Meal \ Date</th>{% for date in dates %}<th>{{ date.day }}</th>{% endfor %}</thead>
+    <tbody>
+    {% for meal_label, dates in meals %}
+      <tr>
+        <th>{{ meal_label }}</th>
+        {% for date, check in dates %}
+        <td>{% if check %}<i class="fas fa-check-circle" aria-hidden="true"></i>{% endif %}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+<a href="{% url 'front_desk.change_food' username=object.user.username %}" class="btn btn-secondary">Change Food (admin only)</a>
+{% if accomm %}
+  <h2>Accommodation</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Check-In</th>
+        <th>Check-Out</th>
+        <th>Room</th>
+      </tr>
+    </thead>
+    {% for checkin, checkout in accomm.get_stay_details %}
+      <tr>
+        <td>{{ checkin | date }}</td>
+        <td>{{ checkout | date }}</td>
+        <td>{{ accomm.room }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endif %}
+{% if invoices %}
+<h2>Invoices</h2>
+<ul>
+  {% for invoice in invoices %}
+    <li class="invoice invoice-{{ invoice.status }}">
+      <a href="{{ invoice.get_absolute_url }}">{{ invoice.reference_number }}</a>:
+      {{ invoice.status|title }}: USD {{ invoice.total }}
+      / TWD {{ invoice.total_twd }}
+      {% if invoice.status == 'new' %}
+        <a href="{% url 'front_desk.cash_invoice_payment' ref=invoice.reference_number %}"
+           class="btn btn-success">Take Cash Payment (admin only)</a>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}
+<div class="row">
+  <div class="col">
+    <h2>Check In:</h2>
+    {% crispy form %}
+  </div>
+  <div class="col">
+    <h2>T-Shirt:</h2>
+    {% if t_shirt_swap_available %}
+      {% crispy t_shirt_form %}
+    {% elif t_shirt %}
+      <p>Selected: {{ t_shirt }}</p>
+      <p>
+        T-shirt swaps will be possible from
+        {{ T_SHIRT_SWAP_ON_OR_AFTER|date:'DATE_FORMAT' }}
+      </p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

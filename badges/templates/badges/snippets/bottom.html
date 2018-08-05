@@ -1,0 +1,40 @@
+{% with user.attendee.country as country %}
+<table class="food-accom-table">
+  <thead>
+    <tr>
+      <th class="table-name"
+        {% if country == 'CN' %}
+          lang="zh-cn"
+        {% elif country == 'JP' %}
+          lang="ja"
+        {% elif country == 'KR' or country == 'KP' %}
+          lang="ko"
+        {% else %}
+          lang="zh-tw"
+        {% endif %}>
+        {{ user.get_full_name }}
+      </th>
+      {% for date in dates %}
+      <th>{{ date|date:"j" }}<br/>{{ date|date:"D" }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for meal_label, dates in meals %}
+      <tr>
+        <th>{{ meal_label }}</th>
+          {% for date, check in dates %}
+          <td>{% if check %}<i class="fas fa-utensils" aria-hidden="true"></i>{% endif %}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    <tr>
+      <th>Accommodation</th>
+        {% for date, check in nights %}
+        <td>{% if check %}<i class="fas fa-bed" aria-hidden="true"></i>{% endif %}</td>
+        {% endfor %}
+      </tr>
+    </tr>
+	</tbody>
+</table>
+{% endwith %}

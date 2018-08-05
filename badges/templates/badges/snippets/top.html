@@ -1,0 +1,63 @@
+{% load static from staticfiles %}
+{% with user.attendee.country as country %}
+<div class="container">
+  <div class="logo">
+    <img src="{% static 'img/logo.svg' %}"/>
+  </div>
+  <div class="name"
+    {% if country == 'CN' %}
+      lang="zh-cn"
+    {% elif country == 'JP' %}
+      lang="ja"
+    {% elif country == 'KR' or country == 'KP' %}
+      lang="ko"
+    {% else %}
+      lang="zh-tw"
+    {% endif %}>
+    <div class="name-content">
+      <div class="name-line1">{{ user.get_full_name }}</div>
+      <div class="name-line2">{{ user.attendee.nametag_2 }}</div>
+      <div class="name-line3">{{ user.attendee.nametag_3 }}</div>
+    </div>
+  </div>
+  <div class="badge-name-bottom">
+    <div class="tags">
+      {% with user.attendee.food as food %}
+        {% if food %}
+          {% if food.diet == 'vegetarian' %}
+            <div class="tag tag-lightgreen tag-large">
+              <i class="fas fa-leaf"></i> Vegetarian 奶蛋素
+            </div>
+          {% elif food.diet == 'vegan' %}
+            <div class="tag tag-green tag-large">
+              <i class="fas fa-leaf"></i> Vegan 全素
+            </div>
+          {% elif food.diet == 'other' %}
+            <div class="tag tag-red-on-white tag-large">
+              <i class="fas fa-utensils"></i> Special Diet 特殊飲食<br/>&nbsp;
+            </div>
+          {% endif %}
+          {% if food.gluten_free %}
+            <div class="tag tag-yellow tag-large">
+              <i class="fas fa-utensils"></i> Gluten Free 無麩質
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endwith %}
+      {% for fpr in user.attendee.pgp_fingerprints.splitlines %}
+        <div class="tag tag-pgp">
+          <i class="fas fa-key"></i>
+          <span class="pgp-fpr">{{ fpr }}</span>
+          <!-- FIXME: Replace with real ID -->
+	        <!-- <div class="pgp-id">#142</div> -->
+        </div>
+      {% endfor %}
+      {% if user.attendee.languages %}
+        <div class="tag">
+          <i class="fas fa-comments"></i> {{ user.attendee.languages }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endwith %}

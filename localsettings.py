@@ -1,0 +1,92 @@
+import os
+
+from wafer.settings import INSTALLED_APPS
+
+checkout = os.path.dirname(__file__)
+
+DEBUG = True
+ALLOWED_HOSTS = ['127.0.0.1']
+
+WAFER_TALKS_OPEN = False
+WAFER_REGISTRATION_OPEN = True
+RECONFIRMATION = True
+BURSARIES_CLOSED = False
+
+DATABASES = {}
+DATABASES['default'] = {
+  'ENGINE': "django.db.backends.sqlite3",
+  'NAME': "dc18.db",
+  'HOST': "",
+  'USER': "",
+  'PASSWORD': "",
+}
+
+MEDIA_ROOT = os.path.join(checkout, 'localmedia/')
+
+SECRET_KEY = 'NJRpMlL4S0kP8RRKXPJijJVfEgvpPhkLpRkRuQCXIWO9eHDojJ'
+
+WAFER_CACHE = 'default'
+CACHES = {
+   'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s %(levelname)-8s %(name)-15s %(message)s',
+        },
+    },
+    'handlers': {
+        'file': {
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': os.path.join(checkout, 'wafer.log'),
+            'formatter': 'default',
+        },
+    },
+    'root': {
+        'handlers': ['file'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
+# See https://docs.djangoproject.com/en/1.9/topics/e-mail/#smtp-backend
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = '25'
+
+# Default for development: dumps all emails on the console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Test site: block robots, etc.
+SANDBOX = True
+
+# Use paypal sandbox
+PAYPAL_TEST = True
+
+PAYPAL_DATA = {
+    'business': 'debian-payments@spi-inc.org',
+    'currency_code': 'USD',
+    'no_shipping': '1',
+}
+
+PAYPAL_IMAGE = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png'
+PAYPAL_SANDBOX_IMAGE = PAYPAL_IMAGE
+
+INVOICE_PREFIX = 'DC18-'
+
+import sys
+if 'test' in sys.argv:
+    try:
+        from testsettings import *
+    except ImportError:
+        pass

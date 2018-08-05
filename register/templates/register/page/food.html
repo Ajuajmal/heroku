@@ -1,0 +1,62 @@
+{% extends "register/form.html" %}
+{% block extra_foot %}
+  <script type="text/javascript">
+    'use strict';
+    $(function() {
+      // Select all buttons on food selection table
+      function updateSelectAllButton(toggle, checkboxes) {
+        if (checkboxes.filter(':checked').length == 0) {
+          toggle.addClass('fa-square')
+            .removeClass('fa-minus-square fa-check-square');
+        } else if (checkboxes.filter(':not(:checked)').length == 0) {
+          toggle.addClass('fa-check-square')
+            .removeClass('fa-square fa-minus-square');
+        } else {
+          toggle.addClass('fa-minus-square')
+            .removeClass('fa-square fa-check-square');
+        }
+      }
+
+      $('#meals .select-day').each(function() {
+        var toggle = $(this);
+        var checkboxes = $(this).closest('tr').find('input');
+        updateSelectAllButton(toggle, checkboxes);
+        $(this).parent().on('click', function(e) {
+          var select = checkboxes.filter(':checked').length == 0;
+          checkboxes.each(function() {
+            this.checked = select;
+          });
+          updateSelectAllButton(toggle, checkboxes);
+        });
+        checkboxes.each(function() {
+          $(this).on('click', function() {
+            updateSelectAllButton(toggle, checkboxes);
+          });
+        });
+      });
+
+      $('#meals .select-all').on('click', function(e) {
+        var selectAll = $(this);
+        var table = selectAll.closest('table');
+        var checkboxes = table.find('input');
+        var selectDays = table.find('.select-day');
+
+        var select = checkboxes.filter(':checked').length == 0;
+
+        checkboxes.each(function() {
+          this.checked = select;
+        });
+
+        updateSelectAllButton(selectAll, checkboxes);
+        selectDays.each(function() {
+          updateSelectAllButton($(this), checkboxes);
+        });
+      });
+
+
+      hookDependentVisibility(
+        $('#diet'), $('#special_diet'),
+        function() { return this.value === 'other' });
+    });
+  </script>
+{% endblock %}

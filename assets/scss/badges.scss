@@ -1,0 +1,339 @@
+@import "./_variables.scss";
+@import "normalize.css/normalize";
+
+@import "./fonts.scss";
+@import "@fortawesome/fontawesome-free-webfonts/scss/fontawesome";
+@import "@fortawesome/fontawesome-free-webfonts/scss/fa-regular";
+@import "@fortawesome/fontawesome-free-webfonts/scss/fa-solid";
+
+@page {
+  size: 210mm 297mm;
+  margin: 5mm 5mm 0 5mm;
+}
+
+html {
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+body {
+  font-family: "Open Sans", "Noto Sans CJK TC", "Source Han Sans TC", sans-serif;
+  font-size: 12pt;
+  margin: 0;
+}
+
+.sheet {
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+  page-break-after: always;
+}
+
+body.A4 .sheet {
+  width: 200mm;
+  height: 287mm;
+}
+
+@media screen {
+  body {
+    background: #e0e0e0;
+  }
+
+  .sheet {
+    background: white;
+    box-shadow: 0 .5mm 2mm rgba(0,0,0,.3);
+    margin: 5mm auto;
+    padding: 5mm;
+  }
+}
+
+.badge-face {
+  position: absolute;
+  width: 91mm;
+  height: 112.5mm;
+  margin: 0;
+}
+
+.badge-topleft {
+  left: 2mm;
+  top: 2mm;
+}
+
+.badge-topright {
+  right: 2mm;
+  top: 2mm;
+}
+
+/* note that it is going to be rotated */
+
+.badge-mid {
+  position: absolute;
+  width: 91mm;
+  height: 112.5mm;
+  margin: 0;
+}
+
+.badge-midleft {
+  right: 2mm;
+  top: 128.5mm;
+}
+
+.badge-midright {
+  left: 2mm;
+  top: 128.5mm;
+}
+
+.badge-bottom {
+  position: absolute;
+  left: 2mm;
+  right: 2mm;
+  bottom: 2mm;
+  height: 30mm;
+}
+
+@media screen {
+  .badge-topleft {
+    left: 7mm;
+    top: 7mm;
+    padding-right: 7mm;
+    border-right: 0.1mm dashed #000;
+    padding-bottom: 7mm;
+    border-bottom: 0.1mm dashed #000;
+  }
+
+  .badge-topright {
+    right: 7mm;
+    top: 7mm;
+    padding-left: 7mm;
+    padding-bottom: 7mm;
+    border-bottom: 0.1mm dashed #000;
+  }
+
+  .badge-midleft {
+    right: inherit;
+    left: 7mm;
+    top: 126.5mm;
+    padding-top: 7mm;
+    padding-right: 7mm;
+    border-right: 0.1mm dashed #000;
+  }
+
+  .badge-midright {
+    left: inherit;
+    right: 7mm;
+    top: 133.5mm;
+  }
+
+  .badge-bottom {
+    left: 7mm;
+    right: 7mm;
+    bottom: 7mm;
+    padding-top: 7mm;
+    border-top: 0.1mm dashed #000;
+  }
+}
+
+@media print {
+.badge-mid {
+  transform: rotate(180deg);
+}
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5mm solid #4b0080;
+}
+
+.name {
+  font-family: "Open Sans Condensed", "Noto Sans CJK TC", "Source Han Sans TC", sans-serif;
+  flex: 1;
+  margin: auto 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.name-content div {
+  margin: 2mm 0;
+
+  -webkit-line-clamp: 2;
+  line-height: 1.1em;
+  max-height: 2.3em;
+}
+
+.name-line1 {
+  font-weight: 700;
+  font-size: 32pt;
+}
+
+.name-line2, .name-line3 {
+  font-weight: 700;
+  font-size: 18pt;
+}
+
+.badge-name-bottom {
+  align-self: start;
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  width: 100%;
+}
+
+.logo {
+  margin-top: 3mm;
+  margin-bottom: auto;
+
+  img {
+    height: 15mm;
+  }
+}
+
+.tags {
+  flex: 1;
+  margin-left: 2mm;
+  margin-right: 2mm;
+
+  .tag {
+    margin: 2mm auto;
+    padding: 0 2.5mm;
+    line-height: 5mm;
+    font-size: 8pt;
+    font-family: "Open Sans Condensed", "Noto Sans CJK TC", "Source Han Sans TC", sans-serif;
+    font-weight: 700;
+    background: #999;
+    border-radius: 2.5mm;
+    color: rgba(255,255,255,0);
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    text-shadow: 0 0 0 #fff;
+  }
+
+  .tag i:before {
+    width: 1.2em;
+    text-align: center;
+  }
+
+  .tag i {
+    width: 1.2em;
+    display: inline-block;
+  }
+
+  .tag-blue {
+    background: #0690e0;
+  }
+  .tag-pgp {
+    background: #0690e0;
+  }
+
+  .pgp-fpr {
+    // weird printing in firefox
+    // font-family: "Roboto Mono";
+    // font-size: 6pt;
+    // color: rgba(255, 255, 255, 0);
+  }
+
+  .pgp-id {
+    float: right;
+  }
+
+  .tag-lightgreen {
+    background: #74d300;
+  }
+
+  .tag-green {
+    background: #0eaf00;
+  }
+
+  .tag-red {
+    background: #a80030;
+  }
+
+  .tag-yellow {
+    background: #d6ae00;
+  }
+
+  .tag-purple {
+    background: #4b0080;
+  }
+
+  .tag-center {
+    text-align: center;
+  }
+
+  .tag-large {
+    font-size: 12pt;
+    line-height: 8mm;
+  }
+
+  .tag-red-on-white {
+    color: #a80030;
+    background: #fff;
+    border: 0.5mm solid #a80030;
+    box-sizing: border-box;
+  }
+}
+
+.badge-midleft, .badge-midright, .badge-bottom {
+  font-size: 8pt;
+
+  h1 {
+    font-size: 13pt;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+}
+
+.two-col {
+  column-count: 2;
+
+  p {
+    page-break-inside: avoid;
+    margin: 0;
+    padding: 0.5em 0;
+  }
+
+  ul {
+    margin: 0;
+  }
+}
+
+.food-accom-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+
+  .table-name{
+    width: 30mm;
+  }
+
+  tbody tr {
+    border-top: 0.2mm solid #000;
+  }
+
+  td, th {
+	  font-weight: 700;
+	  text-align: center;
+	  padding-top: 0.8mm;
+	  padding-bottom: 0.8mm;
+    height: 3.6mm;
+    line-height: 3.0mm;
+  }
+}
+
+.food-accom-table-date {
+  width: 9mm;
+}
